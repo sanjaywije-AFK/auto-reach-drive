@@ -4,15 +4,18 @@ import { ClipboardList, TrendingUp, Users, Wallet } from "lucide-react";
 import AdminLayout from "@/components/AdminLayout";
 import StatusBadge from "@/components/StatusBadge";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfileMap } from "@/hooks/useProfileMap";
 import { ACTIVE_STATUSES, formatLKR } from "@/lib/autoreach";
 
 export default function AdminDashboard() {
+  const { profileMap } = useProfileMap();
+
   const { data: bookings } = useQuery({
     queryKey: ["admin-bookings"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("bookings")
-        .select("*, vehicles(registration_number), profiles:customer_id(name)")
+        .select("*, vehicles(registration_number)")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
@@ -71,7 +74,7 @@ export default function AdminDashboard() {
               <Link key={b.id} to={`/admin/bookings/${b.id}`} className="surface-card flex flex-wrap items-center justify-between gap-3 p-4 transition-shadow hover:shadow-lift">
                 <div>
                   <p className="font-semibold">
-                    {b.reference} · {b.profiles?.name}
+                    {b.reference} · {profileMap.get(b.customer_id)?.name ?? "Customer"}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {b.service_category} · {b.vehicles?.registration_number ?? "No vehicle"}
