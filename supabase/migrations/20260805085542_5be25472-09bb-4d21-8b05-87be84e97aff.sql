@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.enforce_driver_self_update() FROM PUBLIC, anon, authenticated;
