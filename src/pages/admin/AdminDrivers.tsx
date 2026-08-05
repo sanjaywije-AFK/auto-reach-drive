@@ -23,7 +23,6 @@ type Driver = {
   id: string;
   name: string;
   phone: string;
-  license_number: string | null;
   availability_status: AvailabilityStatus;
 };
 
@@ -50,6 +49,15 @@ export default function AdminDrivers() {
     },
   });
 
+  const { data: licences } = useQuery({
+    queryKey: ["driver-licences"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("driver_private").select("driver_id,license_number");
+      if (error) throw error;
+      return Object.fromEntries((data ?? []).map((r) => [r.driver_id, r.license_number ?? ""]));
+    },
+  });
+
   const { data: jobCounts } = useQuery({
     queryKey: ["driver-job-counts"],
     queryFn: async () => {
@@ -72,17 +80,28 @@ export default function AdminDrivers() {
       const payload = {
         name: parsed.data.name,
         phone: parsed.data.phone,
-        license_number: parsed.data.license_number || null,
         availability_status: form.availability_status,
       };
-      const { error } = editing
-        ? await supabase.from("drivers").update(payload).eq("id", editing.id)
-        : await supabase.from("drivers").insert(payload);
-      if (error) throw error;
+      let driverId = editing?.id;
+      if (editing) {
+        const { error } = await supabase.from("drivers").update(payload).eq("id", editing.id);
+        if (error) throw error;
+      } else {
+        const { data, error } = await supabase.from("drivers").insert(payload).select("id").single();
+        if (error) throw error;
+        driverId = data.id;
+      }
+      if (driverId) {
+        const { error } = await supabase
+          .from("driver_private")
+          .upsert({ driver_id: driverId, license_number: parsed.data.license_number || null }, { onConflict: "driver_id" });
+        if (error) throw error;
+      }
     },
     onSuccess: () => {
       toast.success(editing ? "Driver updated" : "Driver added");
       qc.invalidateQueries({ queryKey: ["admin-drivers"] });
+      qc.invalidateQueries({ queryKey: ["driver-licences"] });
       setOpen(false);
     },
     onError: (e: Error) => toast.error(e.message),
@@ -110,7 +129,7 @@ export default function AdminDrivers() {
     setForm({
       name: d.name,
       phone: d.phone,
-      license_number: d.license_number ?? "",
+      license_number: licences?.[d.id] ?? "",
       availability_status: d.availability_status,
     });
     setOpen(true);
@@ -137,7 +156,7 @@ export default function AdminDrivers() {
                   <div>
                     <p className="font-display text-lg font-bold text-primary">{d.name}</p>
                     <p className="text-sm text-muted-foreground">{d.phone}</p>
-                    {d.license_number && <p className="text-xs text-muted-foreground">Licence {d.license_number}</p>}
+                    {licences?.[d.id] && <p className="text-xs text-muted-foreground">Licence {licences[d.id]}</p>}
                   </div>
                   <div className="flex gap-1">
                     <Button variant="ghost" size="icon" onClick={() => openEdit(d)} aria-label="Edit driver">

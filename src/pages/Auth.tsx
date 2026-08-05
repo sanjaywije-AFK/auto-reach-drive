@@ -21,13 +21,6 @@ const signUpSchema = signInSchema.extend({
   phone: z.string().trim().min(9, "Enter a valid phone number").max(20),
 });
 
-const DEMOS = [
-  { label: "Customer", email: "customer@autoreach.lk" },
-  { label: "Admin", email: "admin@autoreach.lk" },
-  { label: "Driver", email: "driver@autoreach.lk" },
-];
-const DEMO_PASSWORD = "autoreach123";
-
 export default function Auth() {
   const navigate = useNavigate();
   const { user, role, loading } = useAuth();
@@ -72,13 +65,6 @@ export default function Auth() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Account created — welcome to AutoReach!");
-  };
-
-  const useDemo = async (email: string) => {
-    setBusy(true);
-    await supabase.functions.invoke("seed-demo");
-    setBusy(false);
-    await signIn(email, DEMO_PASSWORD);
   };
 
   return (
@@ -148,19 +134,6 @@ export default function Auth() {
             </Tabs>
           </div>
 
-          <div className="surface-card mt-4 p-5">
-            <p className="text-sm font-semibold">Try a demo account</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              One tap sign-in with sample data. Password: <code className="font-mono">{DEMO_PASSWORD}</code>
-            </p>
-            <div className="mt-3 grid grid-cols-3 gap-2">
-              {DEMOS.map((d) => (
-                <Button key={d.email} variant="soft" size="sm" disabled={busy} onClick={() => useDemo(d.email)}>
-                  {d.label}
-                </Button>
-              ))}
-            </div>
-          </div>
         </div>
       </main>
     </div>
