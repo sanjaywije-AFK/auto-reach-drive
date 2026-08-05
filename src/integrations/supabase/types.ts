@@ -194,12 +194,40 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_private: {
+        Row: {
+          created_at: string
+          driver_id: string
+          license_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          license_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          license_number?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_private_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: true
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       drivers: {
         Row: {
           availability_status: Database["public"]["Enums"]["availability_status"]
           created_at: string
           id: string
-          license_number: string | null
           name: string
           phone: string | null
           updated_at: string
@@ -209,7 +237,6 @@ export type Database = {
           availability_status?: Database["public"]["Enums"]["availability_status"]
           created_at?: string
           id?: string
-          license_number?: string | null
           name: string
           phone?: string | null
           updated_at?: string
@@ -219,7 +246,6 @@ export type Database = {
           availability_status?: Database["public"]["Enums"]["availability_status"]
           created_at?: string
           id?: string
-          license_number?: string | null
           name?: string
           phone?: string | null
           updated_at?: string
