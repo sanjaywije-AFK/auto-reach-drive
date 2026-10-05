@@ -4,6 +4,7 @@ import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
+import Seo from "@/components/Seo";
 
 export interface NavItem {
   to: string;
@@ -33,6 +34,11 @@ export default function AppLayout({
 
   return (
     <div className="min-h-screen bg-gradient-soft">
+      <Seo
+        title={`${title} | AutoReach`}
+        description={`${title} — manage your AutoReach ${subtitle ? subtitle.toLowerCase() : "account"}: vehicle pickup, servicing and delivery in Colombo.`}
+        noindex
+      />
       <header className="bg-gradient-brand">
         <div className="container flex items-center justify-between px-4 py-4">
           <Logo onBrand />

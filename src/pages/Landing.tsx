@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import heroImage from "@/assets/hero-autoreach.jpg";
 import Logo from "@/components/Logo";
+import Seo, { SITE_URL } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { useAuth, homeForRole } from "@/context/AuthContext";
 import { SERVICE_MENU, whatsappLink } from "@/lib/autoreach";
@@ -37,6 +38,21 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="AutoReach | Vehicle Pickup & Doorstep Service Sri Lanka"
+        description="AutoReach collects your vehicle, services it at a trusted centre and delivers it back. Doorstep minor maintenance across Colombo and suburbs."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "AutoRepair",
+          name: "AutoReach",
+          url: SITE_URL,
+          image: `${SITE_URL}${heroImage}`,
+          priceRange: "Rs. 1,500+",
+          description: "Vehicle concierge and doorstep minor maintenance service in Sri Lanka.",
+          areaServed: "Colombo, Sri Lanka",
+          address: { "@type": "PostalAddress", addressCountry: "LK", addressLocality: "Colombo" },
+        }}
+      />
       <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur">
         <div className="container flex items-center justify-between px-4 py-3">
           <Logo />
