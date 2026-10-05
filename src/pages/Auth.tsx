@@ -4,6 +4,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Logo from "@/components/Logo";
+import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -69,6 +70,10 @@ export default function Auth() {
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-soft">
+      <Seo
+        title="Sign in or Create an Account | AutoReach"
+        description="Sign in to AutoReach to book vehicle pickup and servicing, track your car live and view your service history in Colombo."
+      />
       <div className="bg-gradient-brand px-4 py-6">
         <div className="container flex items-center justify-between">
           <Logo onBrand />
