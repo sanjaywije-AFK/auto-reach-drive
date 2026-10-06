@@ -44,6 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(newSession);
       setUser(newSession?.user ?? null);
       if (newSession?.user) {
+        if (_event === "SIGNED_IN" || _event === "USER_UPDATED") setLoading(true);
         setTimeout(() => {
           loadUserData(newSession.user.id).finally(() => setLoading(false));
         }, 0);

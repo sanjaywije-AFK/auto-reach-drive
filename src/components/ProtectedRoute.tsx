@@ -23,6 +23,7 @@ export default function ProtectedRoute({
 
   if (loading) return <FullPageLoader />;
   if (!user) return <Navigate to="/auth" state={{ from: location.pathname }} replace />;
+  if (allow && !role) return <FullPageLoader />;
   if (allow && role && !allow.includes(role)) return <Navigate to={homeForRole(role)} replace />;
   return <>{children}</>;
 }
