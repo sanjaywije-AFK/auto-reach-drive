@@ -11,8 +11,14 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "predev": "bunx tsx scripts/generate-sitemap.ts",
-    "prebuild": "bunx tsx scripts/generate-sitemap.ts"
+    "predev": "tsx scripts/generate-sitemap.ts",
+    "prebuild": "tsx scripts/generate-sitemap.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
+    "test:db": "node tests/database-regression.mjs",
+    "backend:start": "supabase start --exclude studio,imgproxy,edge-runtime,logflare,vector,supavisor",
+    "backend:stop": "supabase stop",
+    "backend:env": "node scripts/local-backend.mjs",
+    "test:setup": "node --test tests/local-backend.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -68,6 +74,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15",
     "@eslint/js": "^9.32.0",
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/jest-dom": "^6.6.0",
@@ -87,7 +94,9 @@
     "lovable-tagger": "^1.1.13",
     "postcss": "^8.5.6",
     "postgres": "^3.4.9",
+    "supabase": "2.58.5",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.23.15",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19",

@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local backend state and frontend overrides
+.env.local
+.env.*.local
+supabase/.temp/
+supabase/.branches/

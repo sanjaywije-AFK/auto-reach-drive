@@ -8,6 +8,15 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      // Keep local Supabase behind the same private Codespaces port as the app.
+      "/backend": {
+        target: "http://127.0.0.1:54321",
+        changeOrigin: true,
+        ws: true,
+        rewrite: (requestPath) => requestPath.replace(/^\/backend/, ""),
+      },
+    },
     hmr: {
       overlay: false,
     },
