@@ -12,12 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
 import { useProfileMap } from "@/hooks/useProfileMap";
 import { DRIVER_STATUSES, whatsappLink, type BookingStatus } from "@/lib/autoreach";
 
 export default function DriverJobDetail() {
   const { id } = useParams<{ id: string }>();
   const qc = useQueryClient();
+  const { user } = useAuth();
   const { profileMap } = useProfileMap();
   const [status, setStatus] = useState<BookingStatus | "">("");
   const [note, setNote] = useState("");
@@ -38,15 +40,18 @@ export default function DriverJobDetail() {
 
   const update = useMutation({
     mutationFn: async () => {
+      if (!user) throw new Error("Please sign in again");
       if (!status) throw new Error("Pick a status first");
       const { error } = await supabase.from("bookings").update({ status }).eq("id", id!);
       if (error) throw error;
-      if (note.trim()) {
-        await supabase.from("booking_status_updates").insert({
+      if (note.trim() || status !== job?.status) {
+        const { error: historyError } = await supabase.from("booking_status_updates").insert({
           booking_id: id!,
           status,
-          note: note.trim().slice(0, 500),
+          note: note.trim().slice(0, 500) || null,
+          updated_by_user_id: user.id,
         });
+        if (historyError) throw new Error("Status saved, but its timeline could not be saved. Please retry.");
       }
     },
     onSuccess: () => {

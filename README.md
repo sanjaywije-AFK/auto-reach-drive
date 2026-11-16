@@ -358,3 +358,21 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+### Verification in Codex Cloud
+
+Use Node.js 22 or newer. The npm startup and build commands use the locally installed `tsx`; Bun is not required. Use `npm ci` for repeatable installs.
+
+```sh
+npm run typecheck
+npm run lint
+npm run test
+npm run test:db
+npm run build
+```
+
+`test:db` runs the migration chain and role/workflow regressions in embedded PostgreSQL with emulated Supabase auth/storage schemas. Live integration checks are separate. See [the resume status](docs/RESUME-STATUS.md) for environment settings, migration deployment, and outstanding live checks.
+
+### Portable development environment
+
+See [GitHub Codespaces setup](docs/CODESPACES.md) for the dev container, isolated local Supabase backend, and private browser preview. This is the preferred development setup when the current cloud environment cannot reach the hosted backend.

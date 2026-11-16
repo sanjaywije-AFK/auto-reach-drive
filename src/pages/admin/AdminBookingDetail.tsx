@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
 import { useProfileMap } from "@/hooks/useProfileMap";
 import {
   BOOKING_STATUSES,
@@ -30,6 +31,7 @@ const NONE = "none";
 export default function AdminBookingDetail() {
   const { id } = useParams<{ id: string }>();
   const qc = useQueryClient();
+  const { user } = useAuth();
   const { profileMap } = useProfileMap();
 
   const { data: booking, isLoading } = useQuery({
@@ -100,6 +102,7 @@ export default function AdminBookingDetail() {
 
   const save = useMutation({
     mutationFn: async () => {
+      if (!user) throw new Error("Please sign in again");
       const { error } = await supabase
         .from("bookings")
         .update({
@@ -118,12 +121,14 @@ export default function AdminBookingDetail() {
         .eq("id", id!);
       if (error) throw error;
 
-      if (form.statusNote.trim()) {
-        await supabase.from("booking_status_updates").insert({
+      if (form.statusNote.trim() || form.status !== booking?.status) {
+        const { error: historyError } = await supabase.from("booking_status_updates").insert({
           booking_id: id!,
           status: form.status,
-          note: form.statusNote.trim().slice(0, 500),
+          note: form.statusNote.trim().slice(0, 500) || null,
+          updated_by_user_id: user.id,
         });
+        if (historyError) throw new Error("Booking saved, but its timeline could not be saved. Please retry.");
       }
     },
     onSuccess: () => {
