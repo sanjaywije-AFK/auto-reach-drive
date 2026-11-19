@@ -325,6 +325,18 @@ export default function AdminBookingDetail() {
               </div>
             </div>
 
+            {booking?.payment_slip_path && (
+              <div className="space-y-2 rounded-xl border bg-muted p-3 text-sm">
+                <p className="font-semibold">Customer bank transfer slip</p>
+                {booking.payment_reference && <p>Reference: {booking.payment_reference}</p>}
+                {booking.payment_slip_uploaded_at && (
+                  <p className="text-xs text-muted-foreground">Sent {new Date(booking.payment_slip_uploaded_at).toLocaleString()}</p>
+                )}
+                <PhotoGallery paths={[booking.payment_slip_path]} />
+                <p className="text-xs text-muted-foreground">Check the slip, then set Payment status to Paid and method to Bank Transfer, and save.</p>
+              </div>
+            )}
+
             <div className="space-y-1.5">
               <Label htmlFor="status-note">Note for this status update</Label>
               <Input

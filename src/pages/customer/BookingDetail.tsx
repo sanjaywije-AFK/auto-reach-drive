@@ -7,6 +7,7 @@ import CustomerLayout from "@/components/CustomerLayout";
 import StatusBadge from "@/components/StatusBadge";
 import StatusTimeline from "@/components/StatusTimeline";
 import { PhotoGallery } from "@/components/PhotoUploader";
+import BankTransferPayment from "@/components/BankTransferPayment";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
@@ -149,6 +150,8 @@ export default function BookingDetail() {
             {data.payment_method ? ` · ${data.payment_method}` : ""}
           </p>
         </div>
+
+        {data.status !== "Cancelled" && <BankTransferPayment booking={data} />}
 
         {data.status === "Completed" && (
           <div className="surface-card p-5">

@@ -92,3 +92,11 @@ export const statusTone = (status: BookingStatus): "muted" | "info" | "warn" | "
 };
 
 export const statusIndex = (status: BookingStatus) => TIMELINE_STATUSES.indexOf(status);
+
+// Bank details shown to customers for direct bank transfer. PLACEHOLDER — replace with real account.
+export const BANK_DETAILS = {
+  bank: "Commercial Bank of Ceylon",
+  branch: "Colombo",
+  accountName: "AutoReach (Pvt) Ltd",
+  accountNumber: "0000000000",
+};
