@@ -93,10 +93,10 @@ export const statusTone = (status: BookingStatus): "muted" | "info" | "warn" | "
 
 export const statusIndex = (status: BookingStatus) => TIMELINE_STATUSES.indexOf(status);
 
-// Bank details shown to customers for direct bank transfer. PLACEHOLDER — replace with real account.
+// Bank details shown to customers for direct bank transfer.
 export const BANK_DETAILS = {
-  bank: "Commercial Bank of Ceylon",
-  branch: "Colombo",
-  accountName: "AutoReach (Pvt) Ltd",
-  accountNumber: "0000000000",
+  bank: "Sampath Bank",
+  branch: "Kandy Metro Branch",
+  accountName: "K.S.Wijayatilake",
+  accountNumber: "110054741548",
 };
