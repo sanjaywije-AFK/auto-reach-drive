@@ -7,6 +7,7 @@ import Logo from "@/components/Logo";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import PasswordInput from "@/components/PasswordInput";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
@@ -88,7 +89,7 @@ export default function Auth() {
       <main className="container flex flex-1 items-start justify-center px-4 py-10">
         <div className="w-full max-w-md">
           <div className="surface-card p-6">
-            <h1 className="font-display text-2xl font-bold text-primary">Welcome to AutoReach</h1>
+            <h1 className="font-display text-2xl font-bold text-primary">Customer Sign in</h1>
             <p className="mt-1 text-sm text-muted-foreground">We Pick Up. We Service. We Deliver.</p>
 
             <Tabs defaultValue="signin" className="mt-6">
@@ -105,7 +106,7 @@ export default function Auth() {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="si-pass">Password</Label>
-                    <Input id="si-pass" type="password" value={form.password} onChange={set("password")} />
+                    <PasswordInput id="si-pass" value={form.password} onChange={set("password")} />
                   </div>
                   <Button type="submit" variant="hero" size="lg" className="w-full" disabled={busy}>
                     {busy && <Loader2 className="h-4 w-4 animate-spin" />} Sign in
@@ -129,7 +130,7 @@ export default function Auth() {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="su-pass">Password</Label>
-                    <Input id="su-pass" type="password" value={form.password} onChange={set("password")} />
+                    <PasswordInput id="su-pass" value={form.password} onChange={set("password")} />
                   </div>
                   <Button type="submit" variant="hero" size="lg" className="w-full" disabled={busy}>
                     {busy && <Loader2 className="h-4 w-4 animate-spin" />} Create account
@@ -138,7 +139,10 @@ export default function Auth() {
               </TabsContent>
             </Tabs>
           </div>
-
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            Staff? <Link to="/driver/login" className="text-primary hover:underline">Driver sign in</Link> ·{" "}
+            <Link to="/admin/login" className="text-primary hover:underline">Admin sign in</Link>
+          </p>
         </div>
       </main>
     </div>

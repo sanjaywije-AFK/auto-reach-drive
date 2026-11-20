@@ -1,3 +1,4 @@
+import StaffLogin from "./pages/StaffLogin";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -44,6 +45,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/admin/login" element={<StaffLogin portal="admin" />} />
+            <Route path="/driver/login" element={<StaffLogin portal="driver" />} />
 
             <Route path="/dashboard" element={customer(<CustomerDashboard />)} />
             <Route path="/vehicles" element={customer(<Vehicles />)} />

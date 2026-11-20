@@ -22,8 +22,11 @@ export default function ProtectedRoute({
   const location = useLocation();
 
   if (loading) return <FullPageLoader />;
-  if (!user) return <Navigate to="/auth" state={{ from: location.pathname }} replace />;
+  if (!user) return <Navigate to={loginFor(allow)} state={{ from: location.pathname }} replace />;
   if (allow && !role) return <FullPageLoader />;
   if (allow && role && !allow.includes(role)) return <Navigate to={homeForRole(role)} replace />;
   return <>{children}</>;
 }
+
+export const loginFor = (allow?: AppRole[]) =>
+  allow?.length === 1 && allow[0] === "admin" ? "/admin/login" : allow?.length === 1 && allow[0] === "driver" ? "/driver/login" : "/auth";

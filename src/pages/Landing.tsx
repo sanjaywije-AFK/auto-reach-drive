@@ -211,6 +211,11 @@ export default function Landing() {
       <footer className="border-t py-8">
         <div className="container flex flex-col items-center justify-between gap-4 px-4 sm:flex-row">
           <Logo showTagline />
+          <div className="flex gap-4 text-xs">
+            <Link to="/auth" className="text-primary hover:underline">Customer sign in</Link>
+            <Link to="/driver/login" className="text-primary hover:underline">Driver sign in</Link>
+            <Link to="/admin/login" className="text-primary hover:underline">Admin sign in</Link>
+          </div>
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} AutoReach — Colombo, Sri Lanka</p>
         </div>
       </footer>

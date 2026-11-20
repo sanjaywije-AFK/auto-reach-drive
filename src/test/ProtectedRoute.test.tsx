@@ -53,3 +53,12 @@ describe("role access", () => {
     expect(screen.queryByText("Private content")).not.toBeInTheDocument();
   });
 });
+
+describe("login page per role", () => {
+  it("sends signed-out admin and driver visitors to their own sign-in pages", async () => {
+    const { loginFor } = await import("@/components/ProtectedRoute");
+    expect(loginFor(["admin"])).toBe("/admin/login");
+    expect(loginFor(["driver"])).toBe("/driver/login");
+    expect(loginFor(["customer"])).toBe("/auth");
+  });
+});
