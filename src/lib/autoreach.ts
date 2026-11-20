@@ -76,7 +76,7 @@ export const SERVICE_MENU = [
   { name: "Inspection Visit", price: "Rs. 1,500 – 3,000" },
 ];
 
-export const WHATSAPP_NUMBER = "94770000000";
+export const WHATSAPP_NUMBER = "94721059942";
 export const whatsappLink = (message: string, phone = WHATSAPP_NUMBER) =>
   `https://wa.me/${phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(message)}`;
 
