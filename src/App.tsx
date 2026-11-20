@@ -10,6 +10,9 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Landing from "./pages/Landing.tsx";
 import Auth from "./pages/Auth.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import RefundPolicy from "./pages/legal/RefundPolicy.tsx";
+import PrivacyPolicy from "./pages/legal/PrivacyPolicy.tsx";
+import Terms from "./pages/legal/Terms.tsx";
 
 import CustomerDashboard from "./pages/customer/Dashboard.tsx";
 import Vehicles from "./pages/customer/Vehicles.tsx";
@@ -45,6 +48,9 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/admin/login" element={<StaffLogin portal="admin" />} />
             <Route path="/driver/login" element={<StaffLogin portal="driver" />} />
 

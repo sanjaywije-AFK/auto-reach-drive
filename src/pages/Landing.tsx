@@ -1,3 +1,4 @@
+import { LegalFooterLinks } from "@/pages/legal/LegalLayout";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -216,6 +217,7 @@ export default function Landing() {
             <Link to="/driver/login" className="text-primary hover:underline">Driver sign in</Link>
             <Link to="/admin/login" className="text-primary hover:underline">Admin sign in</Link>
           </div>
+          <LegalFooterLinks />
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} AutoReach — Colombo, Sri Lanka</p>
         </div>
       </footer>

@@ -143,6 +143,11 @@ export default function Auth() {
             Staff? <Link to="/driver/login" className="text-primary hover:underline">Driver sign in</Link> ·{" "}
             <Link to="/admin/login" className="text-primary hover:underline">Admin sign in</Link>
           </p>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            By signing up you agree to our <Link to="/terms" className="text-primary hover:underline">Terms</Link>,{" "}
+            <Link to="/privacy-policy" className="text-primary hover:underline">Privacy Policy</Link> and{" "}
+            <Link to="/refund-policy" className="text-primary hover:underline">Refund Policy</Link>.
+          </p>
         </div>
       </main>
     </div>
