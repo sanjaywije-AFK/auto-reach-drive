@@ -36,6 +36,9 @@ try {
   for (const name of readdirSync(migrations).filter(n => n.endsWith('.sql')).sort()) {
     await db.exec(readFileSync(`${migrations}/${name}`, 'utf8'));
   }
+  await db.exec('ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS payment_slip_path text, ADD COLUMN IF NOT EXISTS payment_reference text, ADD COLUMN IF NOT EXISTS payment_slip_uploaded_at timestamptz');
+  // Later schema changes are recorded as Drizzle migrations.
+  await db.exec(readFileSync(fileURLToPath(new URL('../drizzle/migrations/0002_fix_booking_update_scope.sql', import.meta.url)), 'utf8'));
   await db.exec(`
     INSERT INTO auth.users(id,email,raw_user_meta_data) VALUES
       ('${customer}','customer@test.invalid','{"role":"admin"}'),
@@ -70,6 +73,16 @@ try {
     const {rows} = await db.query(`UPDATE public.bookings SET status='Vehicle Picked Up' WHERE id='${booking}' RETURNING status,profit`);
     assert.equal(rows[0].status,'Vehicle Picked Up');
     assert.equal(Number(rows[0].profit),1500);
+  }));
+  await check('customer can submit payment slip on own booking', () => asUser(customer, async () => {
+    const {rows} = await db.query(`UPDATE public.bookings SET payment_slip_path='${booking}/slip.jpg',payment_reference='TXN1',payment_slip_uploaded_at=now() WHERE id='${booking}' RETURNING payment_reference`);
+    assert.equal(rows[0].payment_reference,'TXN1');
+  }));
+  await check('customer cannot change booking status', () => asUser(customer, () =>
+    assert.rejects(db.query(`UPDATE public.bookings SET status='Completed' WHERE id='${booking}'`), /assigned driver or an administrator/)));
+  await check('driver can save condition photos', () => asUser(driver, async () => {
+    const {rows} = await db.query(`UPDATE public.bookings SET photos=ARRAY['${booking}/a.jpg'] WHERE id='${booking}' RETURNING photos`);
+    assert.equal(rows[0].photos.length,1);
   }));
   await check('driver cannot change booking financial fields', () => asUser(driver, () =>
     assert.rejects(db.query(`UPDATE public.bookings SET amount_charged=1 WHERE id='${booking}'`), /Only administrators/)));

@@ -23,7 +23,9 @@ export default function TrackVehicle() {
     },
   });
 
-  const active = (data ?? []).filter((b) => ACTIVE_STATUSES.includes(b.status));
+  const active = (data ?? []).filter(
+    (b) => ACTIVE_STATUSES.includes(b.status) || (b.status === "Cancelled" && Date.now() - new Date(b.updated_at).getTime() < 7 * 864e5),
+  );
 
   return (
     <CustomerLayout title="Track my vehicle" subtitle="Live status">

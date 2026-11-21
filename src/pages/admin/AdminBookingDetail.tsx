@@ -101,7 +101,8 @@ export default function AdminBookingDetail() {
     Number(form.pickup_fee || 0) + Number(form.service_cost || 0) + Number(form.additional_charges || 0) - Number(form.discount || 0);
 
   const save = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (override?: BookingStatus) => {
+      if (override) form.status = override;
       if (!user) throw new Error("Please sign in again");
       const { error } = await supabase
         .from("bookings")
@@ -228,6 +229,21 @@ export default function AdminBookingDetail() {
 
           <div className="surface-card space-y-4 p-5">
             <h2 className="font-display text-lg font-bold">Manage booking</h2>
+
+            {booking.status === "Booking Requested" && (
+              <div className="space-y-2 rounded-xl border p-3">
+                <p className="text-sm font-semibold">New booking — confirm or decline</p>
+                <Textarea
+                  placeholder="Note for the customer (e.g. reason for declining)"
+                  value={form.statusNote}
+                  onChange={(e) => setForm((f) => ({ ...f, statusNote: e.target.value }))}
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <Button disabled={save.isPending} onClick={() => save.mutate("Booking Confirmed")}>Confirm booking</Button>
+                  <Button variant="destructive" disabled={save.isPending} onClick={() => save.mutate("Cancelled")}>Decline booking</Button>
+                </div>
+              </div>
+            )}
 
             <div className="space-y-1.5">
               <Label>Status</Label>
